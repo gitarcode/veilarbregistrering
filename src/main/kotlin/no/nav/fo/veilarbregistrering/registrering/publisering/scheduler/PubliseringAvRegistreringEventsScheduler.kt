@@ -17,14 +17,8 @@ class PubliseringAvRegistreringEventsScheduler(
     fun publiserRegistreringEvents() {
         try {
             CallId.leggTilCallId()
-            if (unleashClient.isEnabled("veilarbregistrering.publiserRegistreringEvents.toggleOff")) {
-                LOG.info("publisering av event er disablet for cluster")
-                return
-            }
-            if (!leaderElectionClient.isLeader) {
-                return
-            }
-            publiseringAvEventsService.publiserEvents()
+            LOG.info("publisering av event er disablet for cluster")
+              return
         } finally {
             MDC.clear()
         }
