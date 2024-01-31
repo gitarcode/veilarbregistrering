@@ -22,10 +22,6 @@ class ArbeidssokerperiodeScheduler(
     }
 
     private fun overfoerArbeidssokerperioder() {
-        if (!unleashClient.isEnabled(FEATURE_TOGGLE)) {
-            logger.info("Arbeidssøkerperioder overføring: Feature toggle er av")
-            return
-        }
 
         val arbeidssokerperioder = arbeidssokerperiodeService.hentNesteArbeidssokerperioder(100)
 
