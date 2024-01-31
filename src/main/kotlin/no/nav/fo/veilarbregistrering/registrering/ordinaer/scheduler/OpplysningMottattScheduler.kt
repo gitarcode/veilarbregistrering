@@ -22,25 +22,8 @@ class OpplysningMottattScheduler(
     }
 
     private fun overfoerOpplysningerMottatt() {
-        if (!unleashClient.isEnabled(FEATURE_TOGGLE)) {
-            logger.info("Opplysninger om arbeidssøker: Feature toggle er av")
-            return
-        }
-
-        val opplysningerOmArbeidssoekere = brukerRegistreringService.hentNesteOpplysningerOmArbeidssoker(500)
-
-        if (opplysningerOmArbeidssoekere.isEmpty()) {
-            logger.info("Opplysninger om arbeidssøker: Fant ingen arbeidssøkeropplysninger som skal overføres")
-            return
-        }
-
-        logger.info("Opplysninger om arbeidssøker: Hendelser til overføring ${opplysningerOmArbeidssoekere.size}")
-
-        opplysningerOmArbeidssoekere.forEach { (_, opplysninger) -> opplysningerMottattProducer.publiserOpplysningerMottatt(opplysninger) }
-
-        brukerRegistreringService.settOpplysningerOmArbeidssoekerSomOverfort(opplysningerOmArbeidssoekere.map { it.first.toInt() })
-
-        logger.info("Opplysninger om arbeidssøker: Hendelser overført ${opplysningerOmArbeidssoekere.size}")
+        logger.info("Opplysninger om arbeidssøker: Feature toggle er av")
+          return
     }
 
     companion object {
