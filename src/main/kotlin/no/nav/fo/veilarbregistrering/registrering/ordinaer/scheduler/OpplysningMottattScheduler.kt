@@ -22,10 +22,6 @@ class OpplysningMottattScheduler(
     }
 
     private fun overfoerOpplysningerMottatt() {
-        if (!unleashClient.isEnabled(FEATURE_TOGGLE)) {
-            logger.info("Opplysninger om arbeidssøker: Feature toggle er av")
-            return
-        }
 
         val opplysningerOmArbeidssoekere = brukerRegistreringService.hentNesteOpplysningerOmArbeidssoker(500)
 
