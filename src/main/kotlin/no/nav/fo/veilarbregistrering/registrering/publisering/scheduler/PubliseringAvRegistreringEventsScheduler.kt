@@ -17,10 +17,6 @@ class PubliseringAvRegistreringEventsScheduler(
     fun publiserRegistreringEvents() {
         try {
             CallId.leggTilCallId()
-            if (unleashClient.isEnabled("veilarbregistrering.publiserRegistreringEvents.toggleOff")) {
-                LOG.info("publisering av event er disablet for cluster")
-                return
-            }
             if (!leaderElectionClient.isLeader) {
                 return
             }
@@ -31,7 +27,6 @@ class PubliseringAvRegistreringEventsScheduler(
     }
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(PubliseringAvRegistreringEventsScheduler::class.java)
         const val HVERT_TIENDE_SEKUND = "0/10 * * * * *"
     }
 }
