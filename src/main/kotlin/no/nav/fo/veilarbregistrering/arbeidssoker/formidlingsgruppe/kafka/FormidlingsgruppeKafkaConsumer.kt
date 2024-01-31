@@ -41,18 +41,13 @@ class FormidlingsgruppeKafkaConsumer internal constructor(
     }
 
     override fun run() {
-
-        if (stopKonsumeringAvFormidlingsgruppe()) {
-            LOG.info("Kill-switch '{}' aktivert. Hopper over lesing fra kafka", KILL_SWITCH_TOGGLE_NAME)
-            return
-        }
         MDC.put(mdcTopicKey, topic)
         LOG.info("Running")
         try {
             KafkaConsumer<String, String>(kafkaConsumerProperties).use { consumer ->
                 consumer.subscribe(listOf(topic))
                 LOG.info("Subscribing to {}", topic)
-                while (!stopKonsumeringAvFormidlingsgruppe()) {
+                while (true) {
                     val consumerRecords = consumer.poll(Duration.ofMinutes(2))
                     LOG.info("Leser {} events fra topic {}", consumerRecords.count(), topic)
 
@@ -89,8 +84,6 @@ class FormidlingsgruppeKafkaConsumer internal constructor(
 
     private fun behandleFormidlingsgruppeMelding(melding: ConsumerRecord<String, String>) =
         formidlingsgruppeMottakService.behandle(map(melding.value()))
-
-    private fun stopKonsumeringAvFormidlingsgruppe() = unleashClient.isEnabled(KILL_SWITCH_TOGGLE_NAME)
 
     companion object {
         private val LOG = LoggerFactory.getLogger(FormidlingsgruppeKafkaConsumer::class.java)
