@@ -22,9 +22,6 @@ class ReaktiveringResource(
     @PostMapping("/fullfoerreaktivering")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     override fun reaktivering() {
-        if (tjenesteErNede()) {
-            throw RuntimeException("Tjenesten er nede for øyeblikket. Prøv igjen senere.")
-        }
 
         val bruker = userService.finnBrukerGjennomPdl()
         tilgangskontrollService.sjekkSkrivetilgangTilBruker(bruker, "reaktivering")
@@ -35,9 +32,6 @@ class ReaktiveringResource(
     @PostMapping("/fullfoerreaktivering/systembruker")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     override fun reaktiveringMedSystembruker(@RequestBody fnr: Fnr) {
-        if (tjenesteErNede()) {
-            throw RuntimeException("Tjenesten er nede for øyeblikket. Prøv igjen senere.")
-        }
 
         val bruker = userService.finnBrukerGjennomPdl(Foedselsnummer(fnr.fnr))
         tilgangskontrollService.sjekkSkrivetilgangTilBrukerForSystem(bruker.gjeldendeFoedselsnummer, CefMelding("System forsøker å reaktivere bruker med fødselsnummer=${bruker.gjeldendeFoedselsnummer.foedselsnummer} leser egen meldekort informasjon", bruker.gjeldendeFoedselsnummer))
@@ -52,6 +46,4 @@ class ReaktiveringResource(
 
         return KanReaktiveresDto(kanReaktiveres = reaktiveringBrukerService.kanReaktiveres(bruker))
     }
-
-    private fun tjenesteErNede(): Boolean = unleashClient.isEnabled("arbeidssokerregistrering.nedetid")
 }
