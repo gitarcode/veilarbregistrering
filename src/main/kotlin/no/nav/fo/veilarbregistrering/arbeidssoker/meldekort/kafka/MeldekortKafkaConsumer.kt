@@ -33,10 +33,6 @@ class MeldekortKafkaConsumer internal constructor(
     }
 
     override fun run() {
-        if (stopKonsumeringAvMeldekort()) {
-            logger.info("Kill-switch '$KILL_SWITCH_TOGGLE_NAME' aktivert. Hopper over lesing fra kafka")
-            return
-        }
         MDC.put(mdcTopicKey, topic)
         logger.info("Running")
 
@@ -44,7 +40,7 @@ class MeldekortKafkaConsumer internal constructor(
             KafkaConsumer<String, String>(kafkaConsumerProperties).use { consumer ->
                 consumer.subscribe(listOf(topic))
                 logger.info("Subscribing to {}", topic)
-                while (!stopKonsumeringAvMeldekort()) {
+                while (true) {
                     val consumerRecords = consumer.poll(Duration.ofMinutes(2))
                     logger.info("Leser {} events fra topic {}", consumerRecords.count(), topic)
 
@@ -85,8 +81,6 @@ class MeldekortKafkaConsumer internal constructor(
         val meldekortEventDto = objectMapper.readValue(event.value(), MeldekortEventDto::class.java)
         meldekortMottakService.behandleMeldekortEvent(meldekortEventDto.map())
     }
-
-    private fun stopKonsumeringAvMeldekort() = unleashClient.isEnabled(KILL_SWITCH_TOGGLE_NAME)
 
     companion object {
         private const val mdcTopicKey = "topic"
