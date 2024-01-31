@@ -22,38 +22,8 @@ class ArbeidssokerperiodeScheduler(
     }
 
     private fun overfoerArbeidssokerperioder() {
-        if (!unleashClient.isEnabled(FEATURE_TOGGLE)) {
-            logger.info("Arbeidssøkerperioder overføring: Feature toggle er av")
-            return
-        }
-
-        val arbeidssokerperioder = arbeidssokerperiodeService.hentNesteArbeidssokerperioder(100)
-
-        if (arbeidssokerperioder.isEmpty()) {
-            logger.info("Arbeidssøkerperioder overføring: Fant ingen arbeidssøkerperioder som skal overføres")
-            return
-        }
-
-        val startHendelser = arbeidssokerperioder
-            .map {
-                ArbeidssokerperiodeHendelseMelding(Hendelse.STARTET, it.foedselsnummer.foedselsnummer, it.fra)
-            }
-
-        val stoppHendelser = arbeidssokerperioder
-            .filter { it.til !== null }
-            .map {
-                ArbeidssokerperiodeHendelseMelding(Hendelse.STOPPET, it.foedselsnummer.foedselsnummer, it.til!!)
-            }
-
-        val hendelser = (startHendelser + stoppHendelser).sortedBy { it.tidspunkt }
-
-        logger.info("Arbeidssøkerperioder overføring: Hendelser til overføring ${hendelser.size}")
-
-        hendelser.forEach { arbeidssokerperiodeProducer.publiserArbeidssokerperioder(it) }
-
-        arbeidssokerperiodeService.settArbeidssokerperioderSomOverfort(arbeidssokerperioder.map { it.id })
-
-        logger.info("Arbeidssøkerperioder overføring: Hendelser overført ${hendelser.size}")
+        logger.info("Arbeidssøkerperioder overføring: Feature toggle er av")
+          return
     }
 
     companion object {
