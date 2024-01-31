@@ -31,5 +31,5 @@ class SykmeldtResource(
         sykmeldtRegistreringService.registrerSykmeldt(sykmeldtRegistrering, bruker, veileder)
     }
 
-    private fun tjenesteErNede(): Boolean = unleashClient.isEnabled("arbeidssokerregistrering.nedetid")
+    private fun tjenesteErNede(): Boolean = false
 }

@@ -53,5 +53,5 @@ class ReaktiveringResource(
         return KanReaktiveresDto(kanReaktiveres = reaktiveringBrukerService.kanReaktiveres(bruker))
     }
 
-    private fun tjenesteErNede(): Boolean = unleashClient.isEnabled("arbeidssokerregistrering.nedetid")
+    private fun tjenesteErNede(): Boolean = false
 }

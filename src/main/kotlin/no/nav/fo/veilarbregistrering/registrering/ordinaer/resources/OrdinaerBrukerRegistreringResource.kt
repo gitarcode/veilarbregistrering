@@ -37,5 +37,5 @@ class OrdinaerBrukerRegistreringResource(
         return opprettetRegistrering
     }
 
-    private fun tjenesteErNede(): Boolean = unleashClient.isEnabled("arbeidssokerregistrering.nedetid")
+    private fun tjenesteErNede(): Boolean = false
 }
