@@ -23,19 +23,7 @@ class OrdinaerBrukerRegistreringResource(
 
     @PostMapping("/fullfoerordinaerregistrering")
     override fun registrerBruker(@RequestBody ordinaerBrukerRegistrering: OrdinaerBrukerRegistrering): OrdinaerBrukerRegistrering {
-        if (tjenesteErNede()) {
-            brukerRegistreringService.registrerAtArenaHarPlanlagtNedetid()
-            throw RuntimeException("Tjenesten er nede for øyeblikket. Prøv igjen senere.")
-        }
-        val bruker = userService.finnBrukerGjennomPdl()
-        tilgangskontrollService.sjekkSkrivetilgangTilBruker(bruker, "registrering")
-
-        val veileder = navVeilederService.navVeileder()
-        val opprettetRegistrering =
-            brukerRegistreringService.registrerBrukerUtenOverforing(ordinaerBrukerRegistrering, bruker, veileder)
-        brukerRegistreringService.overforArena(opprettetRegistrering.id, bruker, veileder)
-        return opprettetRegistrering
+        brukerRegistreringService.registrerAtArenaHarPlanlagtNedetid()
+          throw RuntimeException("Tjenesten er nede for øyeblikket. Prøv igjen senere.")
     }
-
-    private fun tjenesteErNede(): Boolean = unleashClient.isEnabled("arbeidssokerregistrering.nedetid")
 }
