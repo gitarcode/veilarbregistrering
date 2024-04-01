@@ -18,12 +18,13 @@ class OrdinaerBrukerRegistreringResource(
     private val userService: UserService,
     private val brukerRegistreringService: BrukerRegistreringService,
     private val navVeilederService: NavVeilederService,
-    private val unleashClient: Unleash
+    private val unleashClient: Unleash,
 ) : OrdinaerBrukerRegistreringApi {
-
     @PostMapping("/fullfoerordinaerregistrering")
-    override fun registrerBruker(@RequestBody ordinaerBrukerRegistrering: OrdinaerBrukerRegistrering): OrdinaerBrukerRegistrering {
+    override fun registrerBruker(
+        @RequestBody ordinaerBrukerRegistrering: OrdinaerBrukerRegistrering,
+    ): OrdinaerBrukerRegistrering {
         brukerRegistreringService.registrerAtArenaHarPlanlagtNedetid()
-          throw RuntimeException("Tjenesten er nede for øyeblikket. Prøv igjen senere.")
+        throw RuntimeException("Tjenesten er nede for øyeblikket. Prøv igjen senere.")
     }
 }
