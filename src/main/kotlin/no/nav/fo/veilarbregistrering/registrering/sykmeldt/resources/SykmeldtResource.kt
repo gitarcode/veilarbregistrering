@@ -16,20 +16,13 @@ class SykmeldtResource(
     private val userService: UserService,
     private val unleashClient: Unleash,
     private val sykmeldtRegistreringService: SykmeldtRegistreringService,
-    private val navVeilederService: NavVeilederService
+    private val navVeilederService: NavVeilederService,
 ) : SykmeldtApi {
-
     @PostMapping("/fullfoersykmeldtregistrering")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    override fun registrerSykmeldt(@RequestBody sykmeldtRegistrering: SykmeldtRegistrering) {
-        if (tjenesteErNede()) {
-            throw RuntimeException("Tjenesten er nede for øyeblikket. Prøv igjen senere.")
-        }
-        val bruker = userService.finnBrukerGjennomPdl()
-        tilgangskontrollService.sjekkSkrivetilgangTilBruker(bruker, "registrering for sykmeldt")
-        val veileder = navVeilederService.navVeileder()
-        sykmeldtRegistreringService.registrerSykmeldt(sykmeldtRegistrering, bruker, veileder)
+    override fun registrerSykmeldt(
+        @RequestBody sykmeldtRegistrering: SykmeldtRegistrering,
+    ) {
+        throw RuntimeException("Tjenesten er nede for øyeblikket. Prøv igjen senere.")
     }
-
-    private fun tjenesteErNede(): Boolean = unleashClient.isEnabled("arbeidssokerregistrering.nedetid")
 }
